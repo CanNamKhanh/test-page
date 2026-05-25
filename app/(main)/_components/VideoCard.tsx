@@ -38,7 +38,7 @@ export default function VideoCard({ video, index }: Props) {
   const [likeCount, setLikeCount] = useState(video.likesCount);
 
   const isFirst = index === 0;
-  const isDisabled = !isActive || isFirst;
+  const isDisabled = isFirst;
 
   // ─── Detect video aspect ratio ───────────────────────────────────────────
   const handleLoadedMetadata = useCallback(() => {
@@ -71,12 +71,29 @@ export default function VideoCard({ video, index }: Props) {
   };
 
   // ─── Navigation ──────────────────────────────────────────────────────────
+  const getCurrentIndex = () => {
+    const items = document.querySelectorAll(".snap-start");
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    items.forEach((el, idx) => {
+      const rect = el.getBoundingClientRect();
+      const distance = Math.abs(rect.top);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = idx;
+      }
+    });
+
+    return closestIndex;
+  };
+
   const handleNext = () => {
     const items = document.querySelectorAll(".snap-start");
-    const currentIndex = Array.from(items).findIndex((el) => {
-      const rect = el.getBoundingClientRect();
-      return rect.top >= -10 && rect.top <= 10;
-    });
+    const currentIndex = getCurrentIndex();
+
     items[currentIndex + 1]?.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -85,10 +102,8 @@ export default function VideoCard({ video, index }: Props) {
 
   const handlePrev = () => {
     const items = document.querySelectorAll(".snap-start");
-    const currentIndex = Array.from(items).findIndex((el) => {
-      const rect = el.getBoundingClientRect();
-      return rect.top >= -10 && rect.top <= 10;
-    });
+    const currentIndex = getCurrentIndex();
+
     items[currentIndex - 1]?.scrollIntoView({
       behavior: "smooth",
       block: "start",
