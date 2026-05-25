@@ -34,4 +34,29 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
 # test-page
+
+## Xử lý logic Play/Pause khi cuộn trang
+
+Ứng dụng sử dụng `IntersectionObserver` để theo dõi xem video nào đang xuất hiện trên màn hình.
+
+Khi một video hiển thị ít nhất khoảng `80%` trong viewport, video đó sẽ tự động phát. Ngược lại, nếu người dùng cuộn sang video khác hoặc video không còn hiển thị đủ trên màn hình nữa thì video sẽ tự động dừng và tua về thời điểm ban đầu.
+
+```tsx
+const observer = new IntersectionObserver(
+  ([entry]) => {
+    const active = entry.isIntersecting && entry.intersectionRatio >= 0.8;
+
+    if (active) {
+      video.play();
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  },
+  { threshold: 0.8 },
+);
+```
+
+Cách xử lý này giúp tối ưu hiệu năng vì chỉ có video đang được xem mới chạy, đồng thời tạo trải nghiệm cuộn video tương tự TikTok hoặc Facebook Reels.
