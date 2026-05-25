@@ -231,7 +231,7 @@ export default function VideoCard({ video, index }: Props) {
           <button
             onClick={() => setMuted(!isMuted)}
             aria-label={isMuted ? "Unmute" : "Mute"}
-            className="absolute top-2 left-2 sm:top-3 sm:left-3 rounded-full w-10 h-10 sm:w-13 sm:h-13 flex justify-center items-center hover:bg-white/40 transition-colors"
+            className="absolute top-2 left-2 cursor-pointer sm:top-3 sm:left-3 rounded-full w-10 h-10 sm:w-13 sm:h-13 flex justify-center items-center hover:bg-white/40 transition-colors"
           >
             {isMuted ? (
               <VolumeX size={18} fill="white" className="text-white" />
